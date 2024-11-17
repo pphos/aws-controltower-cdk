@@ -1,0 +1,9 @@
+services:
+  cdk:
+    build:
+      context: .
+    tty: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - .:/workspace:cached
+    working_dir: /workspace
