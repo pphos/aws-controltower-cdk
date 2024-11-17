@@ -1,0 +1,292 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshot test for CtLandingZone Stack 1`] = `
+{
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "IamCtAdminPolicy70D7AC65": {
+      "Properties": {
+        "Description": "",
+        "ManagedPolicyName": "AWSControlTowerAdminPolicy",
+        "Path": "/",
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "ec2:DescribeAvailabilityZones",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::ManagedPolicy",
+    },
+    "IamCtAdminRoleDEBF6FF1": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "controltower.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Ref": "IamCtAdminPolicy70D7AC65",
+          },
+        ],
+        "Path": "/service-role/",
+        "RoleName": "AWSControlTowerAdmin",
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "IamCtCloudTrailPolicyC5FE6862": {
+      "Properties": {
+        "Description": "",
+        "ManagedPolicyName": "AWSControlTowerCloudTrailPolicy",
+        "Path": "/",
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":logs:*:*:log-group:aws-controltower/CloudTrailLogs:*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::ManagedPolicy",
+    },
+    "IamCtCloudTrailRoleE34D38C9": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "cloudtrail.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Ref": "IamCtCloudTrailPolicyC5FE6862",
+          },
+        ],
+        "Path": "/service-role/",
+        "RoleName": "AWSControlTowerCloudTrailRole",
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "IamCtConfigAggregatorRoleForOrgA6C9B093": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "config.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSConfigRoleForOrganizations",
+              ],
+            ],
+          },
+        ],
+        "Path": "/service-role/",
+        "RoleName": "AWSControlTowerConfigAggregatorRoleForOrganizations",
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "IamCtStackSetPolicy174A36D1": {
+      "Properties": {
+        "Description": "",
+        "ManagedPolicyName": "AWSControlTowerStackSetRolePolicy",
+        "Path": "/",
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":iam::*:role/AWSControlTowerExecution",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::ManagedPolicy",
+    },
+    "IamCtStackSetRole27F87440": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "cloudformation.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Ref": "IamCtStackSetPolicy174A36D1",
+          },
+        ],
+        "Path": "/service-role/",
+        "RoleName": "AWSControlTowerStackSetRole",
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "LandingZoneE3D164D7": {
+      "Properties": {
+        "Manifest": {
+          "accessManagement": true,
+          "centlizedLogging": {
+            "accountId": {
+              "Fn::GetAtt": [
+                "OrganizationsLoggingAccountCC78F3E4",
+                "AccountId",
+              ],
+            },
+            "configurations": {
+              "accessLoggingBucket": {
+                "retentionDays": 3650,
+              },
+              "loggingBucket": {
+                "retentionDays": 365,
+              },
+            },
+            "enabled": true,
+          },
+          "governedRegions": [
+            "ap-northeast-1",
+            "us-east-1",
+          ],
+          "organizationStructure": {
+            "sandbox": {
+              "name": "Sandbox",
+            },
+            "security": {
+              "name": "Security",
+            },
+          },
+          "securityRoles": {
+            "accountId": {
+              "Fn::GetAtt": [
+                "OrganizationsSecurityAccountA720B7E7",
+                "AccountId",
+              ],
+            },
+          },
+        },
+        "Version": "3.3",
+      },
+      "Type": "AWS::ControlTower::LandingZone",
+    },
+    "OrganizationsLoggingAccountCC78F3E4": {
+      "Properties": {
+        "AccountName": "log-archive",
+        "Email": "username+aws-log-archive@example.com",
+      },
+      "Type": "AWS::Organizations::Account",
+    },
+    "OrganizationsOrganization6D80FEB3": {
+      "Properties": {
+        "FeatureSet": "ALL",
+      },
+      "Type": "AWS::Organizations::Organization",
+    },
+    "OrganizationsSecurityAccountA720B7E7": {
+      "Properties": {
+        "AccountName": "audit",
+        "Email": "username+aws-audit@example.com",
+      },
+      "Type": "AWS::Organizations::Account",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;
