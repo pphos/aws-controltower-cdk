@@ -55,7 +55,7 @@ docker compose exec cdk bash
 #### 2.2 Install Node.s libraries
 
 ```bash
-ct infra/ct-landing-zone
+cd infra/ct-landing-zone
 npm install
 ```
 
