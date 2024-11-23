@@ -15,7 +15,7 @@ const app = new cdk.App();
 
 // Create stack for "Prod" environment.
 new CtLandingZoneStack(app, "Prod-CtLandingZone", {
-  description: "AWS Control Tower Landing Zone for Prod",
+  description: "AWS Control Tower Landing Zone",
   env: {
     account: prodParameter.env?.account || process.env.CDK_DEFAULT_ACCOUNT,
     region: prodParameter.env?.region || process.env.CDK_DEFAULT_REGION,

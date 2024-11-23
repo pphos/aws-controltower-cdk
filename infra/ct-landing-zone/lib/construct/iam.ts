@@ -26,7 +26,13 @@ export class Iam extends Construct {
       roleName: "AWSControlTowerAdmin",
       assumedBy: new iam.ServicePrincipal("controltower.amazonaws.com"),
       path: "/service-role/",
-    }).addManagedPolicy(ctAdminManagedPolicy);
+      managedPolicies: [
+        iam.ManagedPolicy.fromAwsManagedPolicyName(
+          "service-role/AWSControlTowerServiceRolePolicy"
+        ),
+        ctAdminManagedPolicy,
+      ],
+    });
 
     // AWSControlTowerCloudTrail
     const ctCloudTrailPolicyJSON = {
@@ -55,7 +61,8 @@ export class Iam extends Construct {
       roleName: "AWSControlTowerCloudTrailRole",
       assumedBy: new iam.ServicePrincipal("cloudtrail.amazonaws.com"),
       path: "/service-role/",
-    }).addManagedPolicy(ctCloudTrailManagedPolicy);
+      managedPolicies: [ctCloudTrailManagedPolicy],
+    });
 
     // AWSControlTowerConfigAggregatorRoleForOrganizations
     new iam.Role(this, "CtConfigAggregatorRoleForOrg", {
@@ -96,6 +103,7 @@ export class Iam extends Construct {
       roleName: "AWSControlTowerStackSetRole",
       assumedBy: new iam.ServicePrincipal("cloudformation.amazonaws.com"),
       path: "/service-role/",
-    }).addManagedPolicy(ctStackSetManagedPolicy);
+      managedPolicies: [ctStackSetManagedPolicy],
+    });
   }
 }

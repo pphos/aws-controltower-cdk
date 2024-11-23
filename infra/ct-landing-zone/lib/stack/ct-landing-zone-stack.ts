@@ -20,7 +20,7 @@ export class CtLandingZoneStack extends Stack {
      * Preparation
      * ref: https://docs.aws.amazon.com/ja_jp/controltower/latest/userguide/lz-apis-cfn-setup.html
      */
-    new Iam(this, "Iam");
+    const iam = new Iam(this, "Iam");
     const organization = new Organizations(this, "Organizations", {
       loggingAccountEmail: props.ctLoggingAccountEmail,
       securityAccountEmail: props.ctSecurityAccountEmail,
@@ -33,9 +33,9 @@ export class CtLandingZoneStack extends Stack {
     new LandingZone(this, "LandingZone", {
       version: props.ctVersion,
       governedRegions: props.ctGovernedRegions,
-      centralizedLoggingAccountId: organization.loggingAccountId,
+      centralizedLoggingAccountId: props.ctLoggingAccountEmail,
       enableCentlizedLogging: props.ctEnableCentlizedLogging,
-      securityAccountId: organization.securityAccountId,
-    });
+      securityAccountId: props.ctSecurityAccountEmail,
+    }).addDependencies([iam, organization]);
   }
 }

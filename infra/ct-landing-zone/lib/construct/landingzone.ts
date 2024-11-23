@@ -1,5 +1,5 @@
-import { aws_controltower as controltower, StackProps } from "aws-cdk-lib";
-import { Construct } from "constructs";
+import { aws_controltower as controltower } from "aws-cdk-lib";
+import { Construct, IDependable } from "constructs";
 
 export interface LandingZoneConstructProps {
   version: string;
@@ -10,6 +10,8 @@ export interface LandingZoneConstructProps {
 }
 
 export class LandingZone extends Construct {
+  public readonly landingZone: controltower.CfnLandingZone;
+
   constructor(scope: Construct, id: string, props: LandingZoneConstructProps) {
     super(scope, id);
 
@@ -23,7 +25,7 @@ export class LandingZone extends Construct {
           name: "Sandbox",
         },
       },
-      centlizedLogging: {
+      centralizedLogging: {
         accountId: props.centralizedLoggingAccountId,
         configurations: {
           loggingBucket: {
@@ -38,13 +40,21 @@ export class LandingZone extends Construct {
       securityRoles: {
         accountId: props.securityAccountId,
       },
-      accessManagement: true,
+      accessManagement: {
+        enabled: false,
+      },
     };
 
-    // LandingZone
-    new controltower.CfnLandingZone(this, "LandingZone", {
+    this.landingZone = new controltower.CfnLandingZone(this, "LandingZone", {
       version: props.version,
       manifest: manifest,
     });
+  }
+
+  public addDependencies(dependencies: IDependable[]): this {
+    dependencies.forEach((dependency) => {
+      this.landingZone.node.addDependency(dependency);
+    });
+    return this;
   }
 }
