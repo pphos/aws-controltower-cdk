@@ -33,9 +33,9 @@ export class CtLandingZoneStack extends Stack {
     new LandingZone(this, "LandingZone", {
       version: props.ctVersion,
       governedRegions: props.ctGovernedRegions,
-      centralizedLoggingAccountId: props.ctLoggingAccountEmail,
+      centralizedLoggingAccountId: organization.loggingAccountId,
       enableCentlizedLogging: props.ctEnableCentlizedLogging,
-      securityAccountId: props.ctSecurityAccountEmail,
+      securityAccountId: organization.securityAccountId,
     }).addDependencies([iam, organization]);
   }
 }
