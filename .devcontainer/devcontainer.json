@@ -14,7 +14,7 @@
   // use. Update this value and .devcontainer/docker-compose.yml to the real service name.
   "service": "cdk",
   // The optional 'workspaceFolder' property is the path VS Code should open by default when
-  "remoteUser": "root",
+  "remoteUser": "node",
   // connected. This is typically a file mount in .devcontainer/docker-compose.yml
   "workspaceFolder": "/workspace",
   // Add the IDs of extensions you want installed when the container is created.
@@ -36,5 +36,8 @@
         "amazonwebservices.amazon-q-vscode"
       ]
     }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/aws-cli:1": {}
   }
 }

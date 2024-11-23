@@ -4,6 +4,8 @@ services:
       context: .
     tty: true
     volumes:
+      - ~/.aws/credentials:/home/node/.aws/credentials:ro
+      - ~/.aws/config:/home/node/.aws/config:ro
       - /var/run/docker.sock:/var/run/docker.sock
       - .:/workspace:cached
     working_dir: /workspace
